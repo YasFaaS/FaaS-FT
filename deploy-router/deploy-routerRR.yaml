@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
       - name: routernew
-        image: cloudfaas/fiborouter:1.12.5
+        image: cloudfaas/router-rr:1.10.0
         imagePullPolicy: Always
         ports:
           - containerPort: 8082         
