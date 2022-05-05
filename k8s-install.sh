@@ -31,9 +31,6 @@ scp     reset-config.sh        root@$master:
 
 
 ssh root@$master  sh kubelet.sh  
-#ssh root@$master  sh docker.sh  
-
-#ssh root@$master  apt-get update && apt-get install -y kubelet=1.11.0-00 kubeadm=1.11.0-00 kubectl=1.11.0-00 kubernetes-cni=0.6.0-00 
 
 echo ".......Running on the master node......."
 ssh root@$master  sh reset-config.sh
@@ -45,7 +42,6 @@ tok=$( ssh root@$master kubeadm init   --kubernetes-version stable-1.19 --pod-ne
 echo $tok
 
 ssh root@$master sh master-config.sh
-#ssh root@$master  sh docker.sh  
 #ssh root@$master  sh helm-install.sh   
 
 
@@ -68,9 +64,6 @@ ssh root@$worker  sh install-pkg.sh
 ssh root@$worker  sh kubelet.sh 
 #ssh root@$worker  sh docker.sh  
 ssh root@$worker  sh reset-config.sh 
-
-
-#ssh root@$worker  apt-get update && apt-get install -y kubelet=1.11.0-00 kubeadm=1.11.0-00 kubectl=1.11.0-00 kubernetes-cni=0.6.0-00 
  
 
 echo "Worker joining the cluster..."
@@ -87,32 +80,23 @@ then
     echo "${RED}Cluster validation encountered some problems${reset} "
     fi
 
+#copy files to master node
 scp /home/yabouizem/fission-update/app/deploy.yaml   root@$master:
 scp /home/yabouizem/k8s-experiments1/fission-app/fibonacci.py  root@$master:
+scp -r /monitoring-tools/heapster.sh   root@$master:
 
+# install helm,go and heapster in master node
 ssh root@$master sh go.sh
 ssh root@$master sh helm-install.sh
-#to install fission  AS
-scp -r   work-1.10.1/  root@$master:
 
-#scp -r   work-1.5.9-ListPod/  root@$master:
-#to install fission vanilla
 
-#scp -r   work-1.12.1/  root@$master:
-#scp -r /home/yabouizem/fission-update/scripts/failure-scripts  root@$master:
-scp -r /home/yabouizem/monitoring-tools/heapster/deploy/kube-config   root@$master:
-scp -r /home/yabouizem/monitoring-tools/heapster.sh   root@$master:
+
+#scp -r /home/fission-update/scripts/failure-scripts  root@$master:
+#scp -r /home/monitoring-tools/heapster/deploy/kube-config   root@$master:
 
 ssh root@$master  sh heapster.sh 
 
-ssh root@$master mv  work-1.10.1 work 
-#ssh root@$master cd work/src/github/fission/fission  && 
 
 
-
-echo ".......Cluster Information......"
-#ssh root@$master kubectl label node $secondnode disktype=ssd
-#ssh root@$master  kubectl patch node $lastnode1 -p '{"spec":{"unschedulable":true}}'
-#ssh root@$master  kubectl patch node $lastnode2 -p '{"spec":{"unschedulable":true}}'
 
 
