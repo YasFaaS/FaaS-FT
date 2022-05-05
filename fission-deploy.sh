@@ -10,10 +10,10 @@
 helm install --set "image=cloudfaas/fission-bundle,imageTag=1.10.0,pullPolicy=IfNotPresent,analytics=false,serviceType=NodePort,routerServiceType=NodePort" charts/fission-all
 #install of Fission Request Replication qnd deploy Router-RR
 helm install --set "image=cloudfaas/fission-bundle,imageTag=1.10.1,pullPolicy=IfNotPresent,analytics=false,serviceType=NodePort,routerServiceType=NodePort" charts/fission-all
-Kubectl apply -f deploy-routerRR.yaml
+Kubectl apply -f deploy-router/deploy-routerRR.yaml
 #install of Fission Active-Standby qnd deploy Router-AS
 helm install --set "image=cloudfaas/fission-bundle,imageTag=1.10.2,pullPolicy=IfNotPresent,analytics=false,serviceType=NodePort,routerServiceType=NodePort" charts/fission-all
-Kubectl apply -f deploy-routerAS.yaml
+Kubectl apply -f deploy-router/deploy-routerAS.yaml
 
 echo "Installing the fission CLI..."
  
